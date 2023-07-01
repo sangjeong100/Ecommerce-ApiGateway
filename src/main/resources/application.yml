@@ -13,18 +13,32 @@ spring:
     name: gateway-service
   cloud:
     gateway:
+      default-filters: #외부정보를 연결해서 사용 가능 ->MS 자체는 재기동 안해도 된다.
+        - name: Global Filter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
       routes: #MS routes 설정 
         - id: first-service #routes id 
           uri: http://localhost:8081/ #타겟 주소
           predicates: #조건절
             - Path=/first-service/**
           filters: #필터적용
-            - AddRequestHeader=first-request, first-requset-header2
-            - AddResponseHeader=first-response, firest-response-header2 
+#            - AddRequestHeader=first-request, first-requset-header2
+#            - AddResponseHeader=first-response, firest-response-header2
+            - CustomFilter 
         - id: second-service
           uri: http://localhost:8082/
           predicates: #조건절
             - Path=/second-service/**
           filters:
-            - AddRequestHeader=second-request, second-requset-header2
-            - AddResponseHeader=second-response, second-response-header2
+#            - AddRequestHeader=second-request, second-requset-header2
+#            - AddResponseHeader=second-response, second-response-header2
+            - name: CustomFilter
+            - name: LoggingFilter
+              args:
+                baseMessage: Hi, there.
+                preLogger: true
+                postLogger: true 
+              
