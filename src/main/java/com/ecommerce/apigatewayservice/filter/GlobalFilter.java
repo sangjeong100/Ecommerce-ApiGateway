@@ -1,22 +1,20 @@
 package com.ecommerce.apigatewayservice.filter;
 
-import org.slf4j.Logger;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 
-import com.ecommerce.apigatewayservice.filter.CustomFilter.Config;
-
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 //Global filter는 공통적으로 모든 router에 사용되는 필터 
 // 모든 필터의 처음과 끝에 동작 
 
 @Component
-//@Slf4j
+@Slf4j
 public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Config>{
 
 	public GlobalFilter() {
@@ -30,12 +28,13 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
 			ServerHttpRequest request = exchange.getRequest();
 			ServerHttpResponse response = exchange.getResponse();
 			
-			//log.info(Global Filter baseMessage : {}",config.getBaseMessage());
-			System.out.println("Global Filter baseMessage : {"+config.getBaseMessage()+"}");
+			
+			log.info("Global Filter baseMessage : {}",config.getBaseMessage());
+			//System.out.println("Global Filter baseMessage : {"+config.getBaseMessage()+"}");
 			
 			if(config.isPreLogger()) {
-				//log.info("Global Filter start request id -> {}",request.getId());
-				System.out.println("Global Filter Start request id -> "+request.getId());
+				log.info("Global Filter start request id -> {}",request.getId());
+				//System.out.println("Global Filter Start request id -> "+request.getId());
 			}
 			
 			//Custom Post Filter 
